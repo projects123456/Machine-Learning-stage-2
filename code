@@ -90,15 +90,7 @@ for i in range(len(degrees)):
 plt.show()    
 
 plt.figure(figsize=(20, 10)) 
-cross_val_score(regressor, X_train, y_train, cv=10)
-X_training_poly_tree = poly.fit_transform(X_train) 
-regr1 = regressor.fit(X_training_poly_tree,y_train)
-y_predicted_trainingtree = regr1.predict(X_training_poly_tree)
-MSE_train_tree = mean_squared_error(y_train, y_predicted_training)
 
-X_validiation_poly_tree = poly.transform(X_val)
-    # Predicting the validiation y-values:
-y_predicted_validiation_tree = lin_regr.predict(X_validiation_poly)
 
 # Decision tree regression analysis:
 depths = [2,3,4,5,6,7]    
