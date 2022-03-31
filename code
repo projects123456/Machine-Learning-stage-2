@@ -85,3 +85,55 @@ for i in range(len(degrees)):
 
     i += 1
 plt.show()    
+
+plt.figure(figsize=(20, 10)) 
+cross_val_score(regressor, X_train, y_train, cv=10)
+X_training_poly_tree = poly.fit_transform(X_train) 
+regr1 = regressor.fit(X_training_poly_tree,y_train)
+y_predicted_trainingtree = regr1.predict(X_training_poly_tree)
+MSE_train_tree = mean_squared_error(y_train, y_predicted_training)
+
+X_validiation_poly_tree = poly.transform(X_val)
+    # Predicting the validiation y-values:
+y_predicted_validiation_tree = lin_regr.predict(X_validiation_poly)
+
+# Decision tree regression analysis:
+depths = [2,3,4,5,6,7]    
+for i in range(len(depths)):    
+    plt.subplot(2, 3, i + 1)    # choose the subplot
+    
+    # Initialising the Decision Tree Regression
+    regressor = DecisionTreeRegressor(max_depth=depths[i])
+    
+    regressor.fit(X_train,y_train)
+    # Predicting the y-training:
+    y_predicted_train_tree = regressor.predict(X_train)
+    # Training error:
+    training_error_tree = mean_squared_error(y_train.reshape(-1,1), y_predicted_training.reshape(-1,1))
+    
+    # Predicting the y-training:
+    y_predicted_val_tree = regressor.predict(X_val)
+    # Validiation error: 
+    validiation_error_tree = mean_squared_error(y_val.reshape(-1,1), y_predicted_val_tree.reshape(-1,1))
+    
+    # Predicting the y-test:
+    y_predicted_test_tree = regressor.predict(X_test)
+    # Test error:
+    test_error_tree = mean_squared_error(y_test.reshape(-1,1), y_predicted_test_tree.reshape(-1,1))       
+    
+    X_fit = np.linspace(6, 12, 10) 
+    plt.tight_layout()
+    # Scatter plot for training data (datapoints visualized):
+    plt.scatter(X_train, y_train, color="b", s=10, label="Train Datapoints")   
+    # Scatter plot for validiation data:
+    plt.scatter(X_val, y_val, color="r", s=10, label="Validation Datapoints")   
+    # Plot of model:
+    plt.plot(X_fit, regressor.predict(X_fit.reshape(-1, 1)), color="cornflowerblue", linewidth=2)
+    plt.legend(loc="best")
+    # Labels for x-axis and y-axis and the title for the figure
+    plt.xlabel('Loc GDP per capita')    
+    plt.ylabel('Ladder score')
+    plt.title(f'Max depth = {depths[i]}\nTraining error = {training_error_tree:.5}\nValidation error = {validiation_error_tree:.5}\nTest error ={test_error_tree}')
+    i += 1
+    
+plt.show()    
